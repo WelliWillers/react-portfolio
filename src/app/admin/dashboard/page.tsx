@@ -7,6 +7,7 @@ import {
 } from "@/application/use-cases";
 import { SyncButton } from "@/components/admin/SyncButton";
 import { Award, Cpu, FolderOpen, Phone, Wrench } from "lucide-react";
+export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
   const [projects, skills, services, certificates, contacts] =

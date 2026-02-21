@@ -1,8 +1,9 @@
-import { getServices } from '@/application/use-cases'
-import { ServicesManager } from '@/components/admin/ServicesManager'
+import { getServices } from "@/application/use-cases";
+import { ServicesManager } from "@/components/admin/ServicesManager";
+export const dynamic = "force-dynamic";
 
 export default async function ServicesPage() {
-  const services = await getServices()
+  const services = await getServices();
   return (
     <div>
       <div className="mb-8">
@@ -11,5 +12,5 @@ export default async function ServicesPage() {
       </div>
       <ServicesManager services={services} />
     </div>
-  )
+  );
 }
