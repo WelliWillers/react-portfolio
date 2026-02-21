@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Github, ExternalLink, Star, GitFork, Code2 } from "lucide-react";
+import { Project } from "@/domain/entities";
+import { AnimatePresence, motion } from "framer-motion";
+import { Code2, ExternalLink, GitFork, Github, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { Project, ProjectCategory } from "@/domain/entities";
+import { useState } from "react";
 
 const CATEGORIES: { label: string; value: string }[] = [
   { label: "All", value: "ALL" },
