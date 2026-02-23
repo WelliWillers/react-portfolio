@@ -43,24 +43,13 @@ export default async function ProjectPage({ params }: Props) {
   return (
     <main className="min-h-screen bg-gray-950 pb-16">
       <div className="max-w-4xl mx-auto px-4">
-        <div className="sticky top-0 bg-gray-950 pt-10 pb-2">
+        <div className="sticky top-0 bg-gray-950 pt-10 pb-2 z-10">
           <Link
             href="/#projects"
             className="inline-flex items-center gap-2 text-gray-400 hover:text-primary-400 transition-colors mb-8"
           >
             <ArrowLeft size={16} /> Back to Projects
           </Link>
-
-          {project.imageUrl && (
-            <div className="relative h-64 md:h-96 rounded-2xl overflow-hidden border border-gray-800 mb-8">
-              <Image
-                src={project.imageUrl}
-                alt={project.title}
-                fill
-                className="object-cover"
-              />
-            </div>
-          )}
 
           <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
             <div>
@@ -120,6 +109,17 @@ export default async function ProjectPage({ params }: Props) {
             </div>
           )}
         </div>
+
+        {project.imageUrl && (
+          <div className="relative h-64 md:h-96 rounded-2xl overflow-hidden border border-gray-800 mb-8">
+            <Image
+              src={project.imageUrl}
+              alt={project.title}
+              fill
+              className="object-cover"
+            />
+          </div>
+        )}
 
         {project.readme ? (
           <div className="mt-10 prose prose-invert prose-pre:bg-gray-800 prose-pre:border prose-pre:border-gray-700 prose-a:text-primary-400 max-w-none">

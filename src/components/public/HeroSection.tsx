@@ -75,7 +75,7 @@ export function HeroSection({
           </p>
 
           <p className="text-gray-400 text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
-            {profile?.bio ??
+            {profile?.subtitle ??
               "Building modern web experiences with passion and precision."}
           </p>
 

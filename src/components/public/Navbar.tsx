@@ -63,14 +63,14 @@ export function Navbar({ profile }: { profile: Profile | null }) {
           <ThemeToggle />
           {!!session?.user ? (
             <a href="/admin">
-              {session?.user?.image ? (
+              {profile?.avatarUrl ? (
                 <img
-                  src={session?.user?.image || ""}
+                  src={profile?.avatarUrl || ""}
                   alt="User avatar"
-                  className="w-6 h-6 rounded-full"
+                  className="w-8 h-8 rounded-full"
                 />
               ) : (
-                <div className="w-6 h-6 rounded-full bg-gray-300 center flex items-center justify-center">
+                <div className="w-8 h-8 rounded-full bg-gray-300 center flex items-center justify-center">
                   <User size={18} className="text-gray-900" />
                 </div>
               )}

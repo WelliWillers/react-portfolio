@@ -84,6 +84,7 @@ model Profile {
   name       String   @default("Your Name")
   title      String   @default("Full Stack Developer")
   bio        String   @default("I build things for the web.")
+  subtitle   String?
   avatarUrl  String?
   location   String?
   githubUser String?

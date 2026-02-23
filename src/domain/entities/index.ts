@@ -59,6 +59,7 @@ export interface Profile {
   id: string;
   name: string;
   title: string;
+  subtitle?: string | null;
   bio: string;
   avatarUrl?: string | null;
   location?: string | null;

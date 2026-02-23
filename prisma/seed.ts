@@ -1,36 +1,33 @@
-import { PrismaClient } from '@prisma/client'
-import bcrypt from 'bcryptjs'
+import { PrismaClient } from "@prisma/client";
+import { contactsSeed } from "./seeds/seed_contacts";
+import { skillsSeed } from "./seeds/seed_skills";
+import { userSeed } from "./seeds/seed_user";
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 async function main() {
-  const password = await bcrypt.hash(process.env.ADMIN_PASSWORD || 'admin123', 10)
+  const seedType = process.argv[2];
 
-  const user = await prisma.user.upsert({
-    where: { email: process.env.ADMIN_EMAIL || 'admin@portfolio.dev' },
-    update: {},
-    create: {
-      email: process.env.ADMIN_EMAIL || 'admin@portfolio.dev',
-      password,
-      name: 'Admin',
-    },
-  })
+  console.log("Running seed with type:", seedType);
 
-  await prisma.profile.upsert({
-    where: { id: 'default' },
-    update: {},
-    create: {
-      id: 'default',
-      name: 'Your Name',
-      title: 'Full Stack Developer',
-      bio: 'Passionate developer crafting modern web experiences.',
-      location: 'Brasil',
-    },
-  })
+  if (seedType === "skills") {
+    return await skillsSeed();
+  }
 
-  console.log('Seed complete:', user.email)
+  if (seedType === "contacts") {
+    return await contactsSeed();
+  }
+
+  if (seedType === "user") {
+    return await userSeed();
+  }
+
+  console.log("Running full seed...");
+  await userSeed();
+  await skillsSeed();
+  await contactsSeed();
 }
 
 main()
   .catch(console.error)
-  .finally(() => prisma.$disconnect())
+  .finally(() => prisma.$disconnect());

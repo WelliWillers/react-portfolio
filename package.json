@@ -10,6 +10,9 @@
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:seed": "prisma db seed",
+    "db:seed:skills": "ts-node prisma/seed.ts skills",
+    "db:seed:user": "ts-node prisma/seed.ts user",
+    "db:seed:contacts": "ts-node prisma/seed.ts contacts",
     "db:studio": "prisma studio"
   },
   "prisma": {
