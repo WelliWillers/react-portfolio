@@ -1,5 +1,5 @@
 import { getAllProjects } from "@/application/use-cases";
-import { ProjectsTable } from "@/components/admin/ProjectsTable";
+import { ProjectsTable } from "@/components/admin/Projects/ProjectsTable";
 export const dynamic = "force-dynamic";
 
 export default async function AdminProjectsPage() {

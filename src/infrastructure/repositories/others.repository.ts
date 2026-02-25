@@ -5,6 +5,7 @@ import {
   IServiceRepository,
   IContactRepository,
   IProfileRepository,
+  IWorkRepository,
 } from "@/domain/repositories";
 import {
   Skill,
@@ -12,6 +13,7 @@ import {
   Service,
   Contact,
   Profile,
+  Work,
 } from "@/domain/entities";
 
 export class PrismaSkillRepository implements ISkillRepository {
@@ -52,19 +54,111 @@ export class PrismaCertificateRepository implements ICertificateRepository {
 }
 
 export class PrismaServiceRepository implements IServiceRepository {
-  async findAll() {
-    return prisma.service.findMany({
+  async findAll(): Promise<Service[]> {
+    const services = await prisma.service.findMany({
       orderBy: { createdAt: "asc" },
-    }) as Promise<Service[]>;
+    });
+
+    return services.map(this.mapToEntity);
   }
-  async create(data: Omit<Service, "id">) {
-    return prisma.service.create({ data }) as Promise<Service>;
+
+  async create(
+    data: Omit<Service, "id" | "createdAt" | "updatedAt">,
+  ): Promise<Service> {
+    const service = await prisma.service.create({
+      data: {
+        title: data.title,
+        description: data.description,
+        icon: data.icon ?? null,
+        highlights: data.highlights ? JSON.stringify(data.highlights) : "",
+      },
+    });
+
+    return this.mapToEntity(service);
   }
-  async update(id: string, data: Partial<Service>) {
-    return prisma.service.update({ where: { id }, data }) as Promise<Service>;
+
+  async update(id: string, data: Partial<Service>): Promise<Service> {
+    const service = await prisma.service.update({
+      where: { id },
+      data: {
+        ...(data.title !== undefined && { title: data.title }),
+        ...(data.description !== undefined && {
+          description: data.description,
+        }),
+        ...(data.icon !== undefined && { icon: data.icon }),
+        ...(data.highlights !== undefined && {
+          highlights: JSON.stringify(data.highlights),
+        }),
+      },
+    });
+
+    return this.mapToEntity(service);
   }
-  async delete(id: string) {
+
+  async delete(id: string): Promise<void> {
     await prisma.service.delete({ where: { id } });
+  }
+
+  private mapToEntity(raw: any): Service {
+    return {
+      ...raw,
+      highlights: raw.highlights ? JSON.parse(raw.highlights as string) : [],
+    };
+  }
+}
+
+export class PrismaWorkRepository implements IWorkRepository {
+  async findAll(): Promise<Work[]> {
+    const works = await prisma.work.findMany({
+      orderBy: { createdAt: "asc" },
+    });
+
+    return works.map(this.mapToEntity);
+  }
+
+  async create(
+    data: Omit<Work, "id" | "createdAt" | "updatedAt">,
+  ): Promise<Work> {
+    console.log("Creating work with data:", data);
+    const work = await prisma.work.create({
+      data: {
+        title: data.title,
+        description: data.description,
+        isCurrent: data.isCurrent,
+        company: data.company,
+        startDate: data.startDate,
+        endDate: data.isCurrent ? null : (data.endDate ?? null),
+      },
+    });
+
+    return this.mapToEntity(work);
+  }
+
+  async update(id: string, data: Partial<Work>): Promise<Work> {
+    const work = await prisma.work.update({
+      where: { id },
+      data: {
+        ...(data.title !== undefined && { title: data.title }),
+        ...(data.description !== undefined && {
+          description: data.description,
+        }),
+        ...(data.startDate !== undefined && { startDate: data.startDate }),
+        ...(data.endDate !== undefined && { endDate: data.endDate }),
+        ...(data.isCurrent !== undefined && { isCurrent: data.isCurrent }),
+      },
+    });
+
+    return this.mapToEntity(work);
+  }
+
+  async delete(id: string): Promise<void> {
+    await prisma.work.delete({ where: { id } });
+  }
+
+  private mapToEntity(raw: any): Work {
+    return {
+      ...raw,
+    };
   }
 }
 

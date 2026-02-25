@@ -5,6 +5,7 @@ import {
   Project,
   Service,
   Skill,
+  Work,
 } from "../entities";
 
 export interface IProjectRepository {
@@ -40,6 +41,13 @@ export interface IServiceRepository {
   findAll(): Promise<Service[]>;
   create(data: Omit<Service, "id">): Promise<Service>;
   update(id: string, data: Partial<Service>): Promise<Service>;
+  delete(id: string): Promise<void>;
+}
+
+export interface IWorkRepository {
+  findAll(): Promise<Work[]>;
+  create(data: Omit<Work, "id">): Promise<Work>;
+  update(id: string, data: Partial<Work>): Promise<Work>;
   delete(id: string): Promise<void>;
 }
 

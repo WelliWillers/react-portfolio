@@ -1,5 +1,5 @@
 import { getSkills } from "@/application/use-cases";
-import { SkillsManager } from "@/components/admin/SkillsManager";
+import { SkillsManager } from "@/components/admin/Skills/SkillsManager";
 export const dynamic = "force-dynamic";
 
 export default async function SkillsPage() {

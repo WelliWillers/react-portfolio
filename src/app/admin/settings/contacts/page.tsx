@@ -1,5 +1,5 @@
 import { getContacts } from "@/application/use-cases";
-import { ContactsManager } from "@/components/admin/ContactsManager";
+import { ContactsManager } from "@/components/admin/Contacts/ContactsManager";
 export const dynamic = "force-dynamic";
 
 export default async function ContactsPage() {

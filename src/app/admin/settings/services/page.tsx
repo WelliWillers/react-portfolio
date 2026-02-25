@@ -1,5 +1,5 @@
 import { getServices } from "@/application/use-cases";
-import { ServicesManager } from "@/components/admin/ServicesManager";
+import { ServicesManager } from "@/components/admin/Services/ServicesManager";
 export const dynamic = "force-dynamic";
 
 export default async function ServicesPage() {

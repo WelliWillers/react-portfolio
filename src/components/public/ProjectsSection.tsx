@@ -13,14 +13,14 @@ const CATEGORIES: { label: string; value: string }[] = [
   { label: "Frontend", value: "FRONTEND" },
   { label: "Backend", value: "BACKEND" },
   { label: "Mobile", value: "MOBILE" },
-  { label: "Others", value: "OUTROS" },
+  { label: "FullStack", value: "FULLSTACK" },
 ];
 
 const categoryColors: Record<string, string> = {
   FRONTEND: "from-blue-500 to-cyan-500",
   BACKEND: "from-green-500 to-emerald-500",
   MOBILE: "from-purple-500 to-pink-500",
-  OUTROS: "from-orange-500 to-amber-500",
+  FULLSTACK: "from-orange-500 to-amber-500",
 };
 
 function ProjectCard({ project }: { project: Project }) {
@@ -36,7 +36,6 @@ function ProjectCard({ project }: { project: Project }) {
       whileHover={{ y: -6 }}
       className="bg-gray-800/50 rounded-2xl overflow-hidden border border-gray-700/50 hover:border-primary-500/50 transition-all group"
     >
-      {/* Image / Placeholder */}
       <div className="relative h-48 overflow-hidden">
         {project.imageUrl ? (
           <Image
@@ -149,7 +148,6 @@ export function ProjectsSection({ projects }: { projects: Project[] }) {
             My <span className="gradient-text">Projects</span>
           </h2>
 
-          {/* Filter tabs */}
           <div className="flex flex-wrap items-center justify-center gap-2">
             {CATEGORIES.map((cat) => (
               <motion.button

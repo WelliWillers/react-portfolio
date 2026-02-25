@@ -1,4 +1,4 @@
-export type ProjectCategory = "FRONTEND" | "BACKEND" | "MOBILE" | "OUTROS";
+export type ProjectCategory = "FRONTEND" | "BACKEND" | "MOBILE" | "FULLSTACK";
 
 export interface Project {
   id: string;
@@ -42,6 +42,7 @@ export interface Certificate {
 export interface Service {
   id: string;
   title: string;
+  highlights: { value: string }[];
   description: string;
   icon?: string | null;
 }
@@ -53,6 +54,16 @@ export interface Contact {
   value: string;
   url?: string | null;
   visible: boolean;
+}
+
+export interface Work {
+  id: string;
+  title: string;
+  company: string;
+  description: string;
+  startDate: Date;
+  endDate?: Date | null;
+  isCurrent: boolean;
 }
 
 export interface Profile {

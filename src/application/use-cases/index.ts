@@ -5,6 +5,7 @@ import {
   PrismaServiceRepository,
   PrismaContactRepository,
   PrismaProfileRepository,
+  PrismaWorkRepository,
 } from "@/infrastructure/repositories/others.repository";
 import {
   fetchGithubRepos,
@@ -18,6 +19,7 @@ const certRepo = new PrismaCertificateRepository();
 const serviceRepo = new PrismaServiceRepository();
 const contactRepo = new PrismaContactRepository();
 const profileRepo = new PrismaProfileRepository();
+const workRepo = new PrismaWorkRepository();
 
 // Projects
 export const getPublishedProjects = () => projectRepo.findPublished();
@@ -78,7 +80,7 @@ export async function syncGithubRepos() {
         forks: repo.forks_count,
         language: repo.language,
         topics: repo.topics || [],
-        category: "OUTROS",
+        category: "FULLSTACK",
         published: false,
         featured: false,
       });
@@ -122,3 +124,9 @@ export const deleteContact = (id: string) => contactRepo.delete(id);
 // Profile
 export const getProfile = () => profileRepo.get();
 export const upsertProfile = (data: any) => profileRepo.upsert(data);
+
+// work
+export const getWorks = () => workRepo.findAll();
+export const createWork = (data: any) => workRepo.create(data);
+export const updateWork = (id: string, data: any) => workRepo.update(id, data);
+export const deleteWork = (id: string) => workRepo.delete(id);

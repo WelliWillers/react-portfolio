@@ -1,5 +1,5 @@
 import { getCertificates } from "@/application/use-cases";
-import { CertificatesManager } from "@/components/admin/CertificatesManager";
+import { CertificatesManager } from "@/components/admin/Certifications/CertificatesManager";
 export const dynamic = "force-dynamic";
 
 export default async function CertificatesPage() {

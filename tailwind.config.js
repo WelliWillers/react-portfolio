@@ -56,5 +56,5 @@ module.exports = {
       backgroundSize: { "300%": "300%" },
     },
   },
-  plugins: [require("@tailwindcss/typography")],
+  plugins: [require("@tailwindcss/typography"), require("tailwindcss-animate")],
 };

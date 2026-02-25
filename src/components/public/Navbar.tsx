@@ -1,16 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Code2, LogIn, User } from "lucide-react";
+import { userAtom } from "@/app/page";
 import { ThemeToggle } from "@/components/shared/ThemeToggle";
 import { Profile } from "@/domain/entities";
+import { AnimatePresence, motion } from "framer-motion";
+import { useAtom } from "jotai";
+import { Code2, LogIn, Menu, User, X } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 
 const navLinks = [
   { label: "About", href: "#about" },
   { label: "Skills", href: "#skills" },
   { label: "Services", href: "#services" },
+  { label: "Works", href: "#works" },
   { label: "Projects", href: "#projects" },
   { label: "Certificates", href: "#certificates" },
   { label: "Contact", href: "#contact" },
@@ -20,6 +23,12 @@ export function Navbar({ profile }: { profile: Profile | null }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { data: session } = useSession();
+
+  const [, setUserProfile] = useAtom(userAtom);
+
+  useEffect(() => {
+    setUserProfile(profile);
+  }, [profile]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -46,7 +55,6 @@ export function Navbar({ profile }: { profile: Profile | null }) {
           <span>{profile?.name?.split(" ")[0] ?? "Dev"}</span>
         </a>
 
-        {/* Desktop */}
         <div className="hidden md:flex items-center gap-1">
           {navLinks.map((link) => (
             <a

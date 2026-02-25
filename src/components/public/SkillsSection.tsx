@@ -1,8 +1,8 @@
 "use client";
 
+import { Skill } from "@/domain/entities";
 import { motion } from "framer-motion";
 import { Code2 } from "lucide-react";
-import { Skill } from "@/domain/entities";
 
 function getSkillColor(level: number) {
   if (level < 6)
