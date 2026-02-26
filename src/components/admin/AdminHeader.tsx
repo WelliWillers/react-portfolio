@@ -5,6 +5,7 @@ import { LogOut, User } from "lucide-react";
 import { ThemeToggle } from "@/components/shared/ThemeToggle";
 import { useAtom } from "jotai";
 import { userAtom } from "@/app/page";
+import Image from "next/image";
 
 export function AdminHeader() {
   const { data: session } = useSession();
@@ -18,9 +19,11 @@ export function AdminHeader() {
         <ThemeToggle />
         <div className="flex items-center gap-2 text-sm text-gray-400">
           {session?.user ? (
-            <img
+            <Image
               src={userProfile?.avatarUrl || ""}
               alt="User avatar"
+              width={24}
+              height={24}
               className="w-6 h-6 rounded-full"
             />
           ) : (

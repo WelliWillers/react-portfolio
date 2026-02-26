@@ -13,6 +13,7 @@ export interface Project {
   liveUrl?: string | null;
   stars: number;
   forks: number;
+  views: number;
   language?: string | null;
   topics: string[];
   category: ProjectCategory;

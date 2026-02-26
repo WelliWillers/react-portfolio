@@ -1,5 +1,8 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+import type { Config } from "tailwindcss";
+import typography from "@tailwindcss/typography";
+import animate from "tailwindcss-animate";
+
+const config: Config = {
   darkMode: "class",
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -39,7 +42,10 @@ module.exports = {
         float: "float 3s ease-in-out infinite",
       },
       keyframes: {
-        fadeIn: { "0%": { opacity: "0" }, "100%": { opacity: "1" } },
+        fadeIn: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
         slideUp: {
           "0%": { opacity: "0", transform: "translateY(20px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
@@ -53,8 +59,12 @@ module.exports = {
           "50%": { transform: "translateY(-10px)" },
         },
       },
-      backgroundSize: { "300%": "300%" },
+      backgroundSize: {
+        "300%": "300%",
+      },
     },
   },
-  plugins: [require("@tailwindcss/typography"), require("tailwindcss-animate")],
+  plugins: [typography, animate],
 };
+
+export default config;

@@ -21,6 +21,7 @@ export interface IProjectRepository {
   upsertFromGithub(
     data: Omit<Project, "id" | "createdAt" | "updatedAt">,
   ): Promise<Project>;
+  getAllProjectsViews(): Promise<any>;
 }
 
 export interface ISkillRepository {

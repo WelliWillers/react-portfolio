@@ -24,6 +24,7 @@ const workRepo = new PrismaWorkRepository();
 // Projects
 export const getPublishedProjects = () => projectRepo.findPublished();
 export const getAllProjects = () => projectRepo.findAll();
+export const getAllProjectsViews = () => projectRepo.getAllProjectsViews();
 export const getProjectBySlug = (slug: string) => projectRepo.findBySlug(slug);
 export const updateProject = (id: string, data: any) =>
   projectRepo.update(id, data);
@@ -74,6 +75,7 @@ export async function syncGithubRepos() {
         title: repo.name,
         description: repo.description,
         imageUrl: null,
+        views: 0,
         githubUrl: repo.html_url,
         liveUrl: repo.homepage,
         stars: repo.stargazers_count,

@@ -1,22 +1,24 @@
-import { notFound } from "next/navigation";
 import {
   getProjectBySlug,
   getProjectBySlugWithReadme,
 } from "@/application/use-cases";
+import {
+  ArrowLeft,
+  ExternalLink,
+  Eye,
+  GitFork,
+  Github,
+  Star,
+  Tag,
+} from "lucide-react";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  Github,
-  ExternalLink,
-  Star,
-  GitFork,
-  ArrowLeft,
-  Tag,
-} from "lucide-react";
+import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
+import remarkGfm from "remark-gfm";
+import { ViewTracker } from "./ViewTracker";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -42,6 +44,8 @@ export default async function ProjectPage({ params }: Props) {
 
   return (
     <main className="min-h-screen bg-gray-950 pb-16">
+      <ViewTracker projectId={project.id} />
+
       <div className="max-w-4xl mx-auto px-4">
         <div className="sticky top-0 bg-gray-950 pt-10 pb-2 z-10">
           <Link
@@ -82,19 +86,38 @@ export default async function ProjectPage({ params }: Props) {
             </div>
           </div>
 
-          <div className="flex items-center gap-6 text-gray-500 text-sm mb-8">
+          <div className="flex items-center gap-4 flex-wrap">
+            <div className="flex items-center gap-1.5 text-gray-400 text-sm">
+              <Eye size={15} className="text-primary-400" />
+              <span className="font-mono">
+                {project.views.toLocaleString()}
+              </span>
+              <span>views</span>
+            </div>
+
+            {project.stars > 0 && (
+              <div className="flex items-center gap-1.5 text-gray-400 text-sm">
+                <Star size={15} className="text-yellow-400" />
+                <span className="font-mono">
+                  {project.stars.toLocaleString()}
+                </span>
+              </div>
+            )}
+
+            {project.forks > 0 && (
+              <div className="flex items-center gap-1.5 text-gray-400 text-sm">
+                <GitFork size={15} className="text-gray-400" />
+                <span className="font-mono">
+                  {project.forks.toLocaleString()}
+                </span>
+              </div>
+            )}
+
             {project.language && (
-              <span className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-primary-400" />{" "}
+              <span className="px-2 py-0.5 rounded-full text-xs bg-primary-500/10 text-primary-400 border border-primary-500/20">
                 {project.language}
               </span>
             )}
-            <span className="flex items-center gap-1">
-              <Star size={14} /> {project.stars}
-            </span>
-            <span className="flex items-center gap-1">
-              <GitFork size={14} /> {project.forks}
-            </span>
           </div>
           {project.topics.length > 0 && (
             <div className="flex flex-wrap gap-2">

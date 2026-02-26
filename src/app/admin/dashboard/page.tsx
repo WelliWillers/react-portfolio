@@ -1,23 +1,34 @@
 import {
   getAllProjects,
+  getAllProjectsViews,
   getCertificates,
   getContacts,
   getServices,
   getSkills,
+  getWorks,
 } from "@/application/use-cases";
 import { SyncButton } from "@/components/admin/SyncButton";
-import { Award, Cpu, FolderOpen, Phone, Wrench } from "lucide-react";
+import { Award, Cpu, Eye, FolderOpen, Phone, Wrench } from "lucide-react";
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
-  const [projects, skills, services, certificates, contacts] =
-    await Promise.all([
-      getAllProjects(),
-      getSkills(),
-      getServices(),
-      getCertificates(),
-      getContacts(),
-    ]);
+  const [
+    projects,
+    skills,
+    services,
+    certificates,
+    contacts,
+    works,
+    totalViews,
+  ] = await Promise.all([
+    getAllProjects(),
+    getSkills(),
+    getServices(),
+    getCertificates(),
+    getContacts(),
+    getWorks(),
+    getAllProjectsViews(),
+  ]);
 
   const stats = [
     {
@@ -62,6 +73,20 @@ export default async function DashboardPage() {
       color: "text-pink-400",
       bg: "bg-pink-500/10",
     },
+    {
+      label: "Works",
+      value: works.length,
+      icon: FolderOpen,
+      color: "text-indigo-400",
+      bg: "bg-indigo-500/10",
+    },
+    {
+      label: "Total projects Views",
+      value: totalViews._sum.views?.toLocaleString() ?? "0",
+      icon: Eye,
+      color: "text-cyan-400",
+      bg: "bg-cyan-500/10",
+    },
   ];
 
   return (
@@ -76,7 +101,7 @@ export default async function DashboardPage() {
         <SyncButton />
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-10">
+      <div className="grid grid-cols-2 md:grid-cols-8 gap-4 mb-10">
         {stats.map((stat) => (
           <div
             key={stat.label}
@@ -108,6 +133,9 @@ export default async function DashboardPage() {
                   Category
                 </th>
                 <th className="text-left px-5 py-3 text-gray-400 font-medium hidden md:table-cell">
+                  Views
+                </th>
+                <th className="text-left px-5 py-3 text-gray-400 font-medium hidden md:table-cell">
                   Status
                 </th>
               </tr>
@@ -124,6 +152,7 @@ export default async function DashboardPage() {
                       {p.category}
                     </span>
                   </td>
+                  <td className="px-5 py-3 text-gray-300">{p.views} views</td>
                   <td className="px-5 py-3 hidden md:table-cell">
                     <span
                       className={`px-2 py-0.5 rounded-full text-xs ${p.published ? "bg-green-500/10 text-green-400 border border-green-500/20" : "bg-gray-700/50 text-gray-500 border border-gray-700"}`}

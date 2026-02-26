@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useAtom } from "jotai";
 import { Code2, LogIn, Menu, User, X } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const navLinks = [
@@ -28,7 +29,7 @@ export function Navbar({ profile }: { profile: Profile | null }) {
 
   useEffect(() => {
     setUserProfile(profile);
-  }, [profile]);
+  }, [profile, setUserProfile]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -72,9 +73,11 @@ export function Navbar({ profile }: { profile: Profile | null }) {
           {!!session?.user ? (
             <a href="/admin">
               {profile?.avatarUrl ? (
-                <img
+                <Image
                   src={profile?.avatarUrl || ""}
                   alt="User avatar"
+                  width={32}
+                  height={32}
                   className="w-8 h-8 rounded-full"
                 />
               ) : (

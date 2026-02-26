@@ -225,8 +225,8 @@ export function ServicesManager({
 
             {fields.length === 0 && (
               <p className="text-xs text-gray-600 py-2">
-                No highlights added. Click "Add item" to add bullet points to
-                this service.
+                No highlights added. Click &quot;&lsquo;Add item&quot;&lsquo; to
+                add bullet points to this service.
               </p>
             )}
 

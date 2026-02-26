@@ -10,6 +10,12 @@ function mapProject(p: any): Project {
 }
 
 export class PrismaProjectRepository implements IProjectRepository {
+  async getAllProjectsViews() {
+    const result = await prisma.project.aggregate({
+      _sum: { views: true },
+    });
+    return result;
+  }
   async findAll() {
     const projects = await prisma.project.findMany({
       orderBy: { updatedAt: "desc" },

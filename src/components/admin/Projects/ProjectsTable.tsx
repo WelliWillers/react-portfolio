@@ -119,6 +119,9 @@ export function ProjectsTable({ projects }: { projects: Project[] }) {
                 <th className="text-left px-5 py-3 text-gray-400 font-medium">
                   Status
                 </th>
+                <th className="text-left px-5 py-3 text-gray-400 font-medium">
+                  Views
+                </th>
                 <th className="text-right px-5 py-3 text-gray-400 font-medium">
                   Actions
                 </th>
@@ -157,6 +160,12 @@ export function ProjectsTable({ projects }: { projects: Project[] }) {
                   <td className="px-5 py-3">
                     <span className="px-2 py-0.5 rounded-full text-xs bg-primary-500/10 text-primary-400 border border-primary-500/20">
                       {project.category}
+                    </span>
+                  </td>
+
+                  <td className="px-5 py-3">
+                    <span className="px-2 py-0.5 rounded-full text-xs bg-primary-500/10 ">
+                      {project.views} view
                     </span>
                   </td>
 

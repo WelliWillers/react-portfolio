@@ -34,8 +34,23 @@ model Project {
   category        String    @default("OUTROS")
   published       Boolean   @default(false)
   featured        Boolean   @default(false)
+  views           Int       @default(0)
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
+
+  projectViews    ProjectView[]
+}
+
+model ProjectView {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  ip        String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([projectId])
+  @@index([createdAt])
 }
 
 model Skill {

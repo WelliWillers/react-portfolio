@@ -37,15 +37,13 @@ export function ServiceManagerModal({
   onClose: () => void;
 }) {
   const [isPending, startTransition] = useTransition();
-  const [uploading, setUploading] = useState(false);
+  const [uploading] = useState(false);
 
   const {
     register,
     handleSubmit,
-    setValue,
     control,
     reset,
-    watch,
     formState: { errors },
   } = useForm<ServiceFormData>({
     resolver: zodResolver(serviceSchema),
@@ -168,8 +166,8 @@ export function ServiceManagerModal({
 
             {fields.length === 0 && (
               <p className="text-xs text-gray-600 py-2">
-                No highlights added. Click "Add item" to add bullet points to
-                this service.
+                No highlights added. Click `&quot;`Add item`&quot;` to add
+                bullet points to this service.
               </p>
             )}
 

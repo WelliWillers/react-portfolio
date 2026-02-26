@@ -31,9 +31,9 @@ const iconMap: Record<string, any> = {
 };
 
 export function ServicesSection({ services }: { services: Service[] }) {
+  const [selected, setSelected] = useState<Service | null>(null);
   if (!services.length) return null;
 
-  const [selected, setSelected] = useState<Service | null>(null);
   const SelectedIcon =
     (selected?.icon && iconMap[selected.icon.toLowerCase()]) ?? Code2;
 
@@ -118,7 +118,7 @@ export function ServicesSection({ services }: { services: Service[] }) {
 
           <div className="p-6 pt-2">
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
-              What's included
+              What&quot;s included
             </p>
 
             <ul className="space-y-3">
