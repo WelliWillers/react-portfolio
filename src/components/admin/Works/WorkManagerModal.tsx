@@ -66,9 +66,10 @@ export function WorkManagerModal({
       company: initial.company ?? "",
       description: initial.description ?? "",
       isCurrent: initial.isCurrent ?? false,
-      // z.coerce.date() aceita string "yyyy-MM"
       startDate: toMonthValue(initial.startDate) as unknown as Date,
-      endDate: toMonthValue(initial.endDate) as unknown as Date,
+      endDate: initial.isCurrent
+        ? undefined
+        : (toMonthValue(initial.endDate) as unknown as Date | undefined),
     });
   }, [initial, reset]);
 
@@ -135,7 +136,7 @@ export function WorkManagerModal({
                 label="End Date"
                 type="month"
                 disabled={isCurrent}
-                error={errors.endDate?.message}
+                error={isCurrent ? undefined : errors.endDate?.message}
                 {...register("endDate")}
               />
             </div>

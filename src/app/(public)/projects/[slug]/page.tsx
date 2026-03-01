@@ -47,30 +47,34 @@ export default async function ProjectPage({ params }: Props) {
       <ViewTracker projectId={project.id} />
 
       <div className="max-w-4xl mx-auto px-4">
-        <div className="sticky top-0 bg-gray-950 pt-10 pb-2 z-10">
+        <div className="sticky top-0 bg-gray-950/95 backdrop-blur-sm pt-6 md:pt-10 pb-2 z-10">
           <Link
             href="/#projects"
-            className="inline-flex items-center gap-2 text-gray-400 hover:text-primary-400 transition-colors mb-8"
+            className="inline-flex items-center gap-2 text-gray-400 hover:text-primary-400 transition-colors mb-4 md:mb-8 text-sm"
           >
-            <ArrowLeft size={16} /> Back to Projects
+            <ArrowLeft size={14} /> Back to Projects
           </Link>
 
-          <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
-            <div>
-              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-primary-500/20 text-primary-400 border border-primary-500/30 mb-3 inline-block">
+          <div className="flex flex-wrap items-start justify-between gap-3 mb-3 md:mb-6">
+            <div className="min-w-0 flex-1">
+              <span className="px-2 py-0.5 md:px-3 md:py-1 rounded-full text-xs font-semibold bg-primary-500/20 text-primary-400 border border-primary-500/30 mb-2 inline-block">
                 {project.category}
               </span>
-              <h1 className="text-4xl font-bold text-white">{project.title}</h1>
+              <h1 className="text-2xl md:text-4xl font-bold text-white leading-tight truncate">
+                {project.title}
+              </h1>
             </div>
-            <div className="flex items-center gap-2">
+
+            <div className="flex items-center gap-2 shrink-0">
               {project.githubUrl && (
                 <a
                   href={project.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 bg-gray-800 text-gray-300 rounded-xl hover:bg-gray-700 transition-colors text-sm"
+                  className="flex items-center gap-1.5 px-3 py-1.5 md:px-4 md:py-2 bg-gray-800 text-gray-300 rounded-xl hover:bg-gray-700 transition-colors text-xs md:text-sm"
                 >
-                  <Github size={16} /> GitHub
+                  <Github size={14} />
+                  <span className="hidden sm:inline">GitHub</span>
                 </a>
               )}
               {project.liveUrl && (
@@ -78,26 +82,27 @@ export default async function ProjectPage({ params }: Props) {
                   href={project.liveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-xl hover:bg-primary-500 transition-colors text-sm"
+                  className="flex items-center gap-1.5 px-3 py-1.5 md:px-4 md:py-2 bg-primary-600 text-white rounded-xl hover:bg-primary-500 transition-colors text-xs md:text-sm"
                 >
-                  <ExternalLink size={16} /> Live Demo
+                  <ExternalLink size={14} />
+                  <span className="hidden sm:inline">Live Demo</span>
                 </a>
               )}
             </div>
           </div>
 
-          <div className="flex items-center gap-4 flex-wrap">
-            <div className="flex items-center gap-1.5 text-gray-400 text-sm">
-              <Eye size={15} className="text-primary-400" />
+          <div className="flex items-center gap-2 md:gap-4 flex-wrap">
+            <div className="flex items-center gap-1.5 text-gray-400 text-xs md:text-sm">
+              <Eye size={13} className="text-primary-400" />
               <span className="font-mono">
                 {project.views.toLocaleString()}
               </span>
-              <span>views</span>
+              <span className="hidden sm:inline">views</span>
             </div>
 
             {project.stars > 0 && (
-              <div className="flex items-center gap-1.5 text-gray-400 text-sm">
-                <Star size={15} className="text-yellow-400" />
+              <div className="flex items-center gap-1 text-gray-400 text-xs md:text-sm">
+                <Star size={13} className="text-yellow-400" />
                 <span className="font-mono">
                   {project.stars.toLocaleString()}
                 </span>
@@ -105,8 +110,8 @@ export default async function ProjectPage({ params }: Props) {
             )}
 
             {project.forks > 0 && (
-              <div className="flex items-center gap-1.5 text-gray-400 text-sm">
-                <GitFork size={15} className="text-gray-400" />
+              <div className="flex items-center gap-1 text-gray-400 text-xs md:text-sm">
+                <GitFork size={13} className="text-gray-400" />
                 <span className="font-mono">
                   {project.forks.toLocaleString()}
                 </span>
@@ -118,19 +123,23 @@ export default async function ProjectPage({ params }: Props) {
                 {project.language}
               </span>
             )}
+
+            {project.topics.length > 0 && (
+              <>
+                <span className="text-gray-700 hidden md:inline">·</span>
+                <div className="flex flex-wrap gap-1.5 w-full md:w-auto">
+                  {project.topics.map((topic) => (
+                    <span
+                      key={topic}
+                      className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-gray-800 text-gray-400 border border-gray-700"
+                    >
+                      <Tag size={9} /> {topic}
+                    </span>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
-          {project.topics.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {project.topics.map((topic) => (
-                <span
-                  key={topic}
-                  className="flex items-center gap-1 px-3 py-1 rounded-full text-xs bg-gray-800 text-gray-400 border border-gray-700"
-                >
-                  <Tag size={10} /> {topic}
-                </span>
-              ))}
-            </div>
-          )}
         </div>
 
         {project.imageUrl && (

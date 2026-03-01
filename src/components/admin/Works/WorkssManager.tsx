@@ -25,7 +25,10 @@ export const workSchema = z
     description: z.string().min(10).max(300),
     isCurrent: z.boolean().optional(),
     startDate: z.coerce.date({ required_error: "Start date is required" }),
-    endDate: z.coerce.date().optional(),
+    endDate: z.preprocess(
+      (val) => (!val || val === "" ? undefined : val),
+      z.date().optional(),
+    ) as z.ZodType<Date | undefined>,
   })
   .refine(
     (data) => {

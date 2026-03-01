@@ -142,6 +142,7 @@ export class PrismaWorkRepository implements IWorkRepository {
         ...(data.description !== undefined && {
           description: data.description,
         }),
+        ...(data.company !== undefined && { company: data.company }),
         ...(data.startDate !== undefined && { startDate: data.startDate }),
         ...(data.endDate !== undefined && { endDate: data.endDate }),
         ...(data.isCurrent !== undefined && { isCurrent: data.isCurrent }),
