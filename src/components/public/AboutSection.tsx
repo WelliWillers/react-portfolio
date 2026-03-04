@@ -1,9 +1,12 @@
-'use client'
+"use client";
 
-import { motion } from 'framer-motion'
-import { MapPin, Code2, Sparkles } from 'lucide-react'
-import Image from 'next/image'
-import { Profile } from '@/domain/entities'
+import { motion } from "framer-motion";
+import { MapPin, Code2, Sparkles } from "lucide-react";
+import Image from "next/image";
+import { Profile } from "@/domain/entities";
+import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
+import remarkGfm from "remark-gfm";
 
 export function AboutSection({ profile }: { profile: Profile | null }) {
   return (
@@ -19,13 +22,22 @@ export function AboutSection({ profile }: { profile: Profile | null }) {
           <div>
             <div className="flex items-center gap-2 text-primary-400 font-mono text-sm mb-4">
               <Code2 size={16} />
-              <span>{'// about.me'}</span>
+              <span>{"// about.me"}</span>
             </div>
             <h2 className="text-4xl font-bold text-white mb-6">
               About <span className="gradient-text">Me</span>
             </h2>
             <p className="text-gray-400 text-lg leading-relaxed mb-6">
-              {profile?.bio ?? 'Passionate developer with a love for crafting elegant solutions.'}
+              <ReactMarkdown
+                components={{
+                  p: ({ children }) => <p className="mb-4">{children}</p>,
+                }}
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeRaw]}
+              >
+                {profile?.bio ??
+                  "Passionate developer with a love for crafting elegant solutions."}
+              </ReactMarkdown>
             </p>
             {profile?.location && (
               <div className="flex items-center gap-2 text-gray-500">
@@ -56,5 +68,5 @@ export function AboutSection({ profile }: { profile: Profile | null }) {
         </motion.div>
       </div>
     </section>
-  )
+  );
 }

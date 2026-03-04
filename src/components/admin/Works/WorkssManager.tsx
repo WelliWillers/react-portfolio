@@ -27,7 +27,7 @@ export const workSchema = z
     startDate: z.coerce.date({ required_error: "Start date is required" }),
     endDate: z.preprocess(
       (val) => (!val || val === "" ? undefined : val),
-      z.date().optional(),
+      z.coerce.date().optional(),
     ) as z.ZodType<Date | undefined>,
   })
   .refine(

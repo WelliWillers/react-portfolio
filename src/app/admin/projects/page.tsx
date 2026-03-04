@@ -1,5 +1,6 @@
 import { getAllProjects } from "@/application/use-cases";
 import { ProjectsTable } from "@/components/admin/Projects/ProjectsTable";
+import { SyncButton } from "@/components/admin/SyncButton";
 export const dynamic = "force-dynamic";
 
 export default async function AdminProjectsPage() {
@@ -12,6 +13,9 @@ export default async function AdminProjectsPage() {
           <p className="text-gray-400 text-sm mt-1">
             Manage visibility, categories and images
           </p>
+        </div>
+        <div className="min-w-52">
+          <SyncButton />
         </div>
       </div>
       <ProjectsTable projects={projects} />

@@ -3,6 +3,7 @@
 import { RefreshCw } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { Button } from "../ui/Button";
 
 export function SyncButton() {
   const [loading, setLoading] = useState(false);
@@ -22,13 +23,14 @@ export function SyncButton() {
   }
 
   return (
-    <button
+    <Button
       onClick={handleSync}
       disabled={loading}
-      className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-xl text-sm font-medium hover:bg-primary-500 transition-colors disabled:opacity-50"
+      variant="primary"
+      icon={<RefreshCw size={16} className={loading ? "animate-spin" : ""} />}
+      className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white w-full rounded-xl text-sm font-medium hover:bg-primary-500 transition-colors disabled:opacity-50"
     >
-      <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
       {loading ? "Syncing..." : "Sync GitHub"}
-    </button>
+    </Button>
   );
 }

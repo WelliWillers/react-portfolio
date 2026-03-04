@@ -77,3 +77,40 @@ export interface Profile {
   location?: string | null;
   githubUser?: string | null;
 }
+
+export interface PostCategory {
+  id: string;
+  name: string;
+  slug: string;
+  createdAt: Date;
+}
+
+export interface Post {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt?: string | null;
+  content: string;
+  coverUrl?: string | null;
+  published: boolean;
+  featured: boolean;
+  views: number;
+  readTime?: number | null;
+  categoryId?: string;
+  comments?: PostComment[];
+  category?: PostCategory | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface PostComment {
+  id: string;
+  postId: string;
+  post?: { title: string; slug: string };
+  name: string;
+  email?: string | null;
+  content: string;
+  approved: boolean;
+  reply?: string | null;
+  createdAt: Date;
+}

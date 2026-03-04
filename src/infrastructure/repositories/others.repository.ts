@@ -1,20 +1,20 @@
-import { prisma } from "@/lib/db/prisma";
 import {
-  ISkillRepository,
-  ICertificateRepository,
-  IServiceRepository,
-  IContactRepository,
-  IProfileRepository,
-  IWorkRepository,
-} from "@/domain/repositories";
-import {
-  Skill,
   Certificate,
-  Service,
   Contact,
   Profile,
+  Service,
+  Skill,
   Work,
 } from "@/domain/entities";
+import {
+  ICertificateRepository,
+  IContactRepository,
+  IProfileRepository,
+  IServiceRepository,
+  ISkillRepository,
+  IWorkRepository,
+} from "@/domain/repositories";
+import { prisma } from "@/lib/db/prisma";
 
 export class PrismaSkillRepository implements ISkillRepository {
   async findAll() {

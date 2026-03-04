@@ -88,7 +88,7 @@ export function ProjectsTable({ projects }: { projects: Project[] }) {
 
   return (
     <>
-      <div className="mb-4 relative max-w-sm">
+      <div className="mb-4 relative w-full gap-4 flex justify-between items-center">
         <Search
           size={15}
           className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"

@@ -8,6 +8,8 @@ import {
   Cpu,
   FolderOpen,
   LayoutDashboard,
+  MessageSquare,
+  Newspaper,
   Phone,
   Settings,
   User,
@@ -27,6 +29,16 @@ const navItems = [
     label: "Projects",
     href: "/admin/projects",
     icon: FolderOpen,
+  },
+  {
+    label: "Blog",
+    href: "/admin/blog",
+    icon: Newspaper,
+  },
+  {
+    href: "/admin/blog/comments",
+    label: "Comments",
+    icon: MessageSquare,
   },
   {
     label: "Settings",

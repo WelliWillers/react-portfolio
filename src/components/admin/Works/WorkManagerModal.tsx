@@ -21,7 +21,6 @@ import {
 import { Input } from "../../ui/Input";
 import { Textarea, WorkFormData, workSchema } from "./WorkssManager";
 
-// Converte Date | string | null para "yyyy-MM" para o input[type=month]
 function toMonthValue(date?: Date | string | null): string {
   if (!date) return "";
   const d = new Date(date);
@@ -141,7 +140,6 @@ export function WorkManagerModal({
               />
             </div>
 
-            {/* isCurrent switch */}
             <div className="flex flex-col gap-1.5">
               <Label.Root className="text-xs font-medium text-gray-400">
                 Currently working here

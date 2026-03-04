@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { contactsSeed } from "./seeds/seed_contacts";
 import { skillsSeed } from "./seeds/seed_skills";
 import { userSeed } from "./seeds/seed_user";
+import { blogSeed } from "./seeds/seed_blog";
 
 const prisma = new PrismaClient();
 
@@ -18,12 +19,17 @@ async function main() {
     return await contactsSeed();
   }
 
+  if (seedType === "blog") {
+    return await blogSeed();
+  }
+
   if (seedType === "user") {
     return await userSeed();
   }
 
   console.log("Running full seed...");
   await userSeed();
+  await blogSeed();
   await skillsSeed();
   await contactsSeed();
 }

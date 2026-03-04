@@ -1,9 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { ArrowLeft, Home, Terminal } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
-import { Home, ArrowLeft, Terminal } from "lucide-react";
 
 const GLITCH_CHARS = "!@#$%^&*<>?/\\|{}[]~`";
 
@@ -38,10 +38,8 @@ function GlitchText({ text }: { text: string }) {
       }, 30);
     };
 
-    // inicial
     startGlitch();
 
-    // repete de tempos em tempos
     const loop = setInterval(startGlitch, 4000);
     return () => {
       clearInterval(interval);

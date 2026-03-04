@@ -38,7 +38,7 @@ model Project {
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 
-  projectViews    ProjectView[]
+  projectViews ProjectView[]
 }
 
 model ProjectView {
@@ -118,4 +118,57 @@ model Profile {
   githubUser String?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  title     String
+  excerpt   String?
+  content   String
+  coverUrl  String?
+  published Boolean  @default(false)
+  featured  Boolean  @default(false)
+  views     Int      @default(0)
+  readTime  Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  categoryId String?
+  category   PostCategory? @relation(fields: [categoryId], references: [id])
+  comments   PostComment[]
+  postViews  PostView[]
+}
+
+model PostCategory {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  color     String   @default("#6366f1")
+  createdAt DateTime @default(now())
+  posts     Post[]
+}
+
+model PostComment {
+  id        String   @id @default(cuid())
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  name      String
+  email     String?
+  content   String
+  approved  Boolean  @default(false)
+  reply     String?
+  createdAt DateTime @default(now())
+
+  @@index([postId])
+}
+
+model PostView {
+  id        String   @id @default(cuid())
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  ip        String?
+  createdAt DateTime @default(now())
+
+  @@index([postId])
 }

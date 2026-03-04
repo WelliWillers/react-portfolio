@@ -8,7 +8,6 @@ export async function trackProjectView(projectId: string) {
   const ip = headersList.get("x-forwarded-for")?.split(",")[0] ?? "unknown";
   const userAgent = headersList.get("user-agent") ?? "";
 
-  // Evita contar a mesma IP mais de uma vez por hora
   const recentView = await prisma.projectView.findFirst({
     where: {
       projectId,

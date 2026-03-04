@@ -1,171 +1,307 @@
+import { prisma } from "@/lib/db/prisma";
+import { DashboardCharts } from "@/components/admin/Dashboard/DashboardCharts";
 import {
-  getAllProjects,
-  getAllProjectsViews,
-  getCertificates,
-  getContacts,
-  getServices,
-  getSkills,
-  getWorks,
-} from "@/application/use-cases";
-import { SyncButton } from "@/components/admin/SyncButton";
-import { Award, Cpu, Eye, FolderOpen, Phone, Wrench } from "lucide-react";
-export const dynamic = "force-dynamic";
+  subDays,
+  subWeeks,
+  subMonths,
+  format,
+  startOfWeek,
+  startOfMonth,
+} from "date-fns";
 
-export default async function DashboardPage() {
+async function getDashboardData() {
+  const now = new Date();
+  const startThisWeek = startOfWeek(now);
+  const startLastWeek = startOfWeek(subWeeks(now, 1));
+  const startThisMonth = startOfMonth(now);
+  const startLastMonth = startOfMonth(subMonths(now, 1));
+
   const [
-    projects,
-    skills,
-    services,
-    certificates,
-    contacts,
-    works,
-    totalViews,
+    totalProjects,
+    publishedProjects,
+    totalPosts,
+    publishedPosts,
+    pendingComments,
+    totalSkills,
+    projectViews,
+    postViews,
+    topProjects,
+    topPosts,
+    projectsByCategory,
+
+    skillsByCategory,
+
+    projectsWithoutImage,
+    projectsWithoutViews,
+
+    pendingCommentsList,
+
+    githubStats,
+
+    projectViewsThisWeek,
+    projectViewsLastWeek,
+    postViewsThisWeek,
+    postViewsLastWeek,
+
+    projectViewsThisMonth,
+    projectViewsLastMonth,
+    postViewsThisMonth,
+    postViewsLastMonth,
+
+    recentProjects,
+    recentPosts,
+    recentComments,
+    recentProjectViews,
   ] = await Promise.all([
-    getAllProjects(),
-    getSkills(),
-    getServices(),
-    getCertificates(),
-    getContacts(),
-    getWorks(),
-    getAllProjectsViews(),
+    prisma.project.count(),
+    prisma.project.count({ where: { published: true } }),
+    prisma.post.count(),
+    prisma.post.count({ where: { published: true } }),
+    prisma.postComment.count({ where: { approved: false } }),
+    prisma.skill.count(),
+
+    prisma.projectView.groupBy({
+      by: ["createdAt"],
+      _count: { id: true },
+      where: { createdAt: { gte: subDays(now, 13) } },
+      orderBy: { createdAt: "asc" },
+    }),
+    prisma.postView.groupBy({
+      by: ["createdAt"],
+      _count: { id: true },
+      where: { createdAt: { gte: subDays(now, 13) } },
+      orderBy: { createdAt: "asc" },
+    }),
+    prisma.project.findMany({
+      where: { published: true },
+      orderBy: { views: "desc" },
+      take: 5,
+      select: { title: true, views: true, category: true, language: true },
+    }),
+    prisma.post.findMany({
+      where: { published: true },
+      orderBy: { views: "desc" },
+      take: 5,
+      select: {
+        title: true,
+        views: true,
+        category: { select: { name: true } },
+      },
+    }),
+    prisma.project.groupBy({
+      by: ["category"],
+      _count: { id: true },
+      where: { published: true },
+    }),
+
+    prisma.skill.groupBy({
+      by: ["category"],
+      _count: { id: true },
+      _avg: { level: true },
+    }),
+
+    prisma.project.findMany({
+      where: { published: true, imageUrl: null },
+      select: { id: true, title: true, category: true },
+      take: 5,
+    }),
+
+    prisma.project.findMany({
+      where: { published: true, views: 0 },
+      select: { id: true, title: true, category: true },
+      take: 5,
+    }),
+
+    prisma.postComment.findMany({
+      where: { approved: false },
+      include: { post: { select: { title: true, slug: true } } },
+      orderBy: { createdAt: "desc" },
+      take: 5,
+    }),
+
+    prisma.project.aggregate({
+      _sum: { stars: true, forks: true },
+      _max: { updatedAt: true },
+      where: { githubId: { not: null } },
+    }),
+
+    prisma.projectView.count({ where: { createdAt: { gte: startThisWeek } } }),
+    prisma.projectView.count({
+      where: { createdAt: { gte: startLastWeek, lt: startThisWeek } },
+    }),
+    prisma.postView.count({ where: { createdAt: { gte: startThisWeek } } }),
+    prisma.postView.count({
+      where: { createdAt: { gte: startLastWeek, lt: startThisWeek } },
+    }),
+
+    prisma.projectView.count({ where: { createdAt: { gte: startThisMonth } } }),
+    prisma.projectView.count({
+      where: { createdAt: { gte: startLastMonth, lt: startThisMonth } },
+    }),
+    prisma.postView.count({ where: { createdAt: { gte: startThisMonth } } }),
+    prisma.postView.count({
+      where: { createdAt: { gte: startLastMonth, lt: startThisMonth } },
+    }),
+
+    prisma.project.findMany({
+      orderBy: { updatedAt: "desc" },
+      take: 3,
+      select: { title: true, updatedAt: true, published: true, slug: true },
+    }),
+    prisma.post.findMany({
+      orderBy: { updatedAt: "desc" },
+      take: 3,
+      select: { title: true, updatedAt: true, published: true, slug: true },
+    }),
+    prisma.postComment.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 3,
+      include: { post: { select: { title: true, slug: true } } },
+    }),
+    prisma.projectView.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 5,
+      include: { project: { select: { title: true, slug: true } } },
+    }),
   ]);
 
-  const stats = [
-    {
-      label: "Total Projects",
-      value: projects.length,
-      icon: FolderOpen,
-      color: "text-blue-400",
-      bg: "bg-blue-500/10",
-    },
-    {
-      label: "Published",
-      value: projects.filter((p) => p.published).length,
-      icon: FolderOpen,
-      color: "text-green-400",
-      bg: "bg-green-500/10",
-    },
-    {
-      label: "Skills",
-      value: skills.length,
-      icon: Cpu,
-      color: "text-purple-400",
-      bg: "bg-purple-500/10",
-    },
-    {
-      label: "Services",
-      value: services.length,
-      icon: Wrench,
-      color: "text-orange-400",
-      bg: "bg-orange-500/10",
-    },
-    {
-      label: "Certificates",
-      value: certificates.length,
-      icon: Award,
-      color: "text-yellow-400",
-      bg: "bg-yellow-500/10",
-    },
-    {
-      label: "Contacts",
-      value: contacts.length,
-      icon: Phone,
-      color: "text-pink-400",
-      bg: "bg-pink-500/10",
-    },
-    {
-      label: "Works",
-      value: works.length,
-      icon: FolderOpen,
-      color: "text-indigo-400",
-      bg: "bg-indigo-500/10",
-    },
-    {
-      label: "Total projects Views",
-      value: totalViews._sum.views?.toLocaleString() ?? "0",
-      icon: Eye,
-      color: "text-cyan-400",
-      bg: "bg-cyan-500/10",
-    },
-  ];
+  function normalizeViewsByDay(
+    views: { createdAt: Date; _count: { id: number } }[],
+  ) {
+    const days: Record<string, number> = {};
+    for (let i = 13; i >= 0; i--) {
+      const key = format(subDays(now, i), "MMM dd");
+      days[key] = 0;
+    }
+    for (const v of views) {
+      const key = format(new Date(v.createdAt), "MMM dd");
+      if (key in days) days[key] += v._count.id;
+    }
+    return Object.entries(days).map(([date, views]) => ({ date, views }));
+  }
 
+  function calcDelta(current: number, previous: number) {
+    if (previous === 0) return current > 0 ? 100 : 0;
+    return Math.round(((current - previous) / previous) * 100);
+  }
+
+  const activityFeed = [
+    ...recentProjects.map((p) => ({
+      type: "project" as const,
+      title: p.title,
+      slug: p.slug,
+      label: p.published ? "Project updated" : "Project saved as draft",
+      date: p.updatedAt,
+    })),
+    ...recentPosts.map((p) => ({
+      type: "post" as const,
+      title: p.title,
+      slug: p.slug,
+      label: p.published ? "Post published" : "Post saved as draft",
+      date: p.updatedAt,
+    })),
+    ...recentComments.map((c) => ({
+      type: "comment" as const,
+      title: c.post.title,
+      slug: c.post.slug,
+      label: `New comment by ${c.name}`,
+      date: c.createdAt,
+    })),
+  ]
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 8);
+
+  const avgReadTime = await prisma.post.aggregate({
+    _avg: { readTime: true },
+    where: { published: true, readTime: { not: null } },
+  });
+
+  return {
+    stats: {
+      totalProjects,
+      publishedProjects,
+      totalPosts,
+      publishedPosts,
+      pendingComments,
+      totalSkills,
+      totalProjectViews: topProjects.reduce((a, p) => a + p.views, 0),
+      totalPostViews: topPosts.reduce((a, p) => a + p.views, 0),
+      avgReadTime: Math.round(avgReadTime._avg.readTime ?? 0),
+      publishedProjectsRate: Math.round(
+        (publishedProjects / (totalProjects || 1)) * 100,
+      ),
+      publishedPostsRate: Math.round(
+        (publishedPosts / (totalPosts || 1)) * 100,
+      ),
+    },
+    projectViewsByDay: normalizeViewsByDay(projectViews),
+    postViewsByDay: normalizeViewsByDay(postViews),
+    topProjects,
+    topPosts,
+    projectsByCategory: projectsByCategory.map((p) => ({
+      name: p.category,
+      value: p._count.id,
+    })),
+    skillsByCategory: skillsByCategory.map((s) => ({
+      name: s.category,
+      count: s._count.id,
+      avgLevel: Math.round((s._avg.level ?? 0) * 10) / 10,
+    })),
+    projectsWithoutImage,
+    projectsWithoutViews,
+    pendingCommentsList,
+    githubStats: {
+      totalStars: githubStats._sum.stars ?? 0,
+      totalForks: githubStats._sum.forks ?? 0,
+      lastSync: githubStats._max.updatedAt,
+    },
+    comparisons: {
+      week: {
+        projectViews: {
+          current: projectViewsThisWeek,
+          previous: projectViewsLastWeek,
+          delta: calcDelta(projectViewsThisWeek, projectViewsLastWeek),
+        },
+        postViews: {
+          current: postViewsThisWeek,
+          previous: postViewsLastWeek,
+          delta: calcDelta(postViewsThisWeek, postViewsLastWeek),
+        },
+      },
+      month: {
+        projectViews: {
+          current: projectViewsThisMonth,
+          previous: projectViewsLastMonth,
+          delta: calcDelta(projectViewsThisMonth, projectViewsLastMonth),
+        },
+        postViews: {
+          current: postViewsThisMonth,
+          previous: postViewsLastMonth,
+          delta: calcDelta(postViewsThisMonth, postViewsLastMonth),
+        },
+      },
+    },
+    activityFeed,
+    recentProjectViews: recentProjectViews.map((v) => ({
+      project: v.project.title,
+      slug: v.project.slug,
+      ip: v.ip ?? "unknown",
+      date: v.createdAt,
+    })),
+  };
+}
+
+export default async function DashboardPage() {
+  const data = await getDashboardData();
   return (
-    <div>
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-2xl font-bold text-white">Dashboard</h1>
-          <p className="text-gray-400 text-sm mt-1">
-            Overview of your portfolio
-          </p>
-        </div>
-        <SyncButton />
-      </div>
-
-      <div className="grid grid-cols-2 md:grid-cols-8 gap-4 mb-10">
-        {stats.map((stat) => (
-          <div
-            key={stat.label}
-            className="bg-gray-900 rounded-2xl border border-gray-800 p-5"
-          >
-            <div
-              className={`w-10 h-10 ${stat.bg} rounded-xl flex items-center justify-center mb-3`}
-            >
-              <stat.icon size={20} className={stat.color} />
-            </div>
-            <p className="text-3xl font-bold text-white">{stat.value}</p>
-            <p className="text-gray-400 text-sm mt-1">{stat.label}</p>
-          </div>
-        ))}
-      </div>
-
+    <div className="space-y-6">
       <div>
-        <h2 className="text-lg font-semibold text-white mb-4">
-          Recent Projects
-        </h2>
-        <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-800">
-                <th className="text-left px-5 py-3 text-gray-400 font-medium">
-                  Title
-                </th>
-                <th className="text-left px-5 py-3 text-gray-400 font-medium hidden md:table-cell">
-                  Category
-                </th>
-                <th className="text-left px-5 py-3 text-gray-400 font-medium hidden md:table-cell">
-                  Views
-                </th>
-                <th className="text-left px-5 py-3 text-gray-400 font-medium hidden md:table-cell">
-                  Status
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {projects.slice(0, 8).map((p) => (
-                <tr
-                  key={p.id}
-                  className="border-b border-gray-800/50 hover:bg-gray-800/30 transition-colors"
-                >
-                  <td className="px-5 py-3 text-gray-300">{p.title}</td>
-                  <td className="px-5 py-3 hidden md:table-cell">
-                    <span className="px-2 py-0.5 rounded-full text-xs bg-primary-500/10 text-primary-400 border border-primary-500/20">
-                      {p.category}
-                    </span>
-                  </td>
-                  <td className="px-5 py-3 text-gray-300">{p.views} views</td>
-                  <td className="px-5 py-3 hidden md:table-cell">
-                    <span
-                      className={`px-2 py-0.5 rounded-full text-xs ${p.published ? "bg-green-500/10 text-green-400 border border-green-500/20" : "bg-gray-700/50 text-gray-500 border border-gray-700"}`}
-                    >
-                      {p.published ? "Published" : "Draft"}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <h1 className="text-2xl font-bold text-white">Dashboard</h1>
+        <p className="text-gray-400 text-sm mt-1">
+          Overview of your portfolio performance.
+        </p>
       </div>
+      <DashboardCharts data={data} />
     </div>
   );
 }

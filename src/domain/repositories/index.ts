@@ -1,6 +1,9 @@
 import {
   Certificate,
   Contact,
+  Post,
+  PostCategory,
+  PostComment,
   Profile,
   Project,
   Service,
@@ -63,4 +66,36 @@ export interface IContactRepository {
 export interface IProfileRepository {
   get(): Promise<Profile | null>;
   upsert(data: Partial<Profile>): Promise<Profile>;
+}
+
+export interface IBlogRepository {
+  findAll(): Promise<Post[]>;
+  findPublished(): Promise<Post[]>;
+  findBySlug(slug: string): Promise<Post | null>;
+  findAllCategories(): Promise<PostCategory[] | null>;
+  create(data: Omit<Post, "id" | "createdAt" | "updatedAt">): Promise<Post>;
+  update(id: string, data: Partial<Post>): Promise<Post>;
+  delete(id: string): Promise<void>;
+  getAllPostsViews(): Promise<any>;
+  estimateReadTime(content: string): number;
+
+  findAllComments(): Promise<PostComment[]>;
+  findCommentsByPost(postId: string): Promise<PostComment[]>;
+  approveComment(id: string): Promise<PostComment>;
+  replyComment(id: string, reply: string): Promise<PostComment>;
+  deleteComment(id: string): Promise<void>;
+  createComment(data: {
+    postId: string;
+    name: string;
+    email?: string;
+    content: string;
+  }): Promise<PostComment>;
+  createComment(data: {
+    postId: string;
+    name: string;
+    email?: string;
+    content: string;
+  }): Promise<PostComment>;
+
+  trackView(postId: string, ip?: string): Promise<void>;
 }

@@ -5,21 +5,18 @@ import { motion } from "framer-motion";
 export default function Loading() {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-950">
-      {/* Background glow */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary-500/5 rounded-full blur-3xl" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-accent-500/5 rounded-full blur-2xl" />
       </div>
 
       <div className="relative flex flex-col items-center gap-10">
-        {/* Logo / Icon */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.4, ease: "easeOut" }}
           className="relative"
         >
-          {/* Outer ring */}
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
@@ -30,7 +27,6 @@ export default function Loading() {
             }}
           />
 
-          {/* Inner ring */}
           <motion.div
             animate={{ rotate: -360 }}
             transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
@@ -41,7 +37,6 @@ export default function Loading() {
             }}
           />
 
-          {/* Center dot */}
           <motion.div
             animate={{ scale: [1, 1.2, 1] }}
             transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
@@ -51,7 +46,6 @@ export default function Loading() {
           </motion.div>
         </motion.div>
 
-        {/* Dots loader */}
         <div className="flex items-center gap-2">
           {[0, 1, 2, 3, 4].map((i) => (
             <motion.div
@@ -72,7 +66,6 @@ export default function Loading() {
           ))}
         </div>
 
-        {/* Text */}
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}

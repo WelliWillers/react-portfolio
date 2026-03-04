@@ -1,6 +1,7 @@
 import {
   getCertificates,
   getProfile,
+  getPublishedPosts,
   getPublishedProjects,
   getServices,
   getSkills,
@@ -25,20 +26,29 @@ export const dynamic = "force-dynamic";
 export const userAtom = atomWithStorage<Profile | null>("user_profile", null);
 
 export default async function HomePage() {
-  const [projects, skills, services, contacts, profile, certificates, works] =
-    await Promise.all([
-      getPublishedProjects(),
-      getSkills(),
-      getServices(),
-      getVisibleContacts(),
-      getProfile(),
-      getCertificates(),
-      getWorks(),
-    ]);
+  const [
+    projects,
+    posts,
+    skills,
+    services,
+    contacts,
+    profile,
+    certificates,
+    works,
+  ] = await Promise.all([
+    getPublishedProjects(),
+    getPublishedPosts(),
+    getSkills(),
+    getServices(),
+    getVisibleContacts(),
+    getProfile(),
+    getCertificates(),
+    getWorks(),
+  ]);
 
   return (
     <main className="min-h-screen bg-gray-950">
-      <Navbar profile={profile} />
+      <Navbar profile={profile} projects={projects} posts={posts} />
       <HeroSection profile={profile} contacts={contacts} />
       <AboutSection profile={profile} />
       <SkillsSection skills={skills} />
